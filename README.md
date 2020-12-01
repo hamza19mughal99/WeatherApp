@@ -1,3 +1,3 @@
 # WeatherApp
 
-By using HTML CSS and NodeJs
+By using HTML CSS and NodeJs.
