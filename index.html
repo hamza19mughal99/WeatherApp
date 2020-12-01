@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherApp</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="index.js"></script>
+</head>
+
+<style>
+    *{
+    margin: 0;
+    padding: 0;
+    /* box-sizing: border-box; */
+    font-family: 'Quicksand', sans-serif;
+}
+
+
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border-radius: 5px; */
+    flex-wrap: wrap;
+    height: 100vh;
+    width: 100vw;
+  
+}
+html, body{
+    font-size: 62.5%;
+    height: 100%;
+}
+.box{
+    width: 20vw;
+    height: 60vh;
+    box-shadow: 0 0.2rem 3rem rgba(0,0,0,0.2);
+    border-radius: 0.5rem;
+}
+.weathericon{
+    height: 40%;
+    clip-path: polygon(100% 0%, 100% 100%, 50% 100%, 0% 100%, 0 0);
+    position: relative;
+}
+.weathericon:before{
+    content: "";
+    position: absolute;
+    top: 0% ;
+    bottom: 0% ;
+    left: 0% ;
+    right: 0%  ;
+    background: linear-gradient(to right, #3EADCF , #ABE9CD );
+    /* opacity: -3; */
+    z-index: -1;
+}
+.weathericon i {
+    width: 100% !important;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.city{
+    height: 20%;
+    text-align: center;
+    background-color: #E5E4E2;
+    
+
+    
+    
+}
+
+h2{
+    font-size: 25px;
+    font-weight: 600 !important;
+    padding-top: 25px;
+}
+.info{
+    height: 40%;
+    text-align: center;
+    background-color: #E5E4E2;
+    padding-top: 20%;
+}
+#date{
+    font-size: 13px;
+    
+}
+.temp{
+    font-size: 30px !important;
+    font-weight: bold;
+}
+.tempmin_max{
+    font-size: 15px;
+    
+}
+
+
+
+@media screen and (max-width: 992px) {
+    .box{
+    width: 53vw;
+    height: 60vh;
+    box-shadow: 0 0.2rem 3rem rgba(0,0,0,0.2);
+    border-radius: 0.5rem;
+}
+    
+  }
+
+  @media screen and (max-width: 992px) {
+    .box{
+    width: 64vw;
+    height: 60vh;
+    box-shadow: 0 0.2rem 3rem rgba(0,0,0,0.2);
+    border-radius: 0.5rem;
+}
+    
+  }
+
+
+</style>
+
+<body>
+
+
+
+
+    <div class="box">
+
+        <div class="weathericon" id="weather">
+            <i class="fa fa-sun-o" style="color: yellow; font-size: 70px; " aria-hidden="true"></i>
+        </div>
+        <div class="city">
+            <h2>
+                {%tempcity%}, {%tempcountry%}
+            </h2>
+        </div>
+        <div class="info">
+            <h1 class="temp">{%tempval%}&deg;C</h1>
+            <p id="date"> TUE | DEC 1 | 10:16PM</p>
+            <h3 class="tempmin_max">Min {%tempmin%}&deg;C | Max {%tempmax%}&deg;C </h3>
+        </div>
+
+
+    </div>
+
+    <script>
+
+        var weather = document.getElementById("weather");
+
+        const tempStatus = "{%tempstatus%}"
+
+        if (tempStatus == "Sunny"){
+           weather.innerHTML = '<i class="fa fa-sun-o" style="color: yellow; font-size: 70px; " aria-hidden="true"></i>'
+        }
+        else if (tempStatus == "clouds"){
+           weather.innerHTML = '<i class="fa fa-cloud" style="color: #f1f2f6; font-size: 70px; " aria-hidden="true"></i>'
+        }
+        else if (tempStatus == "Smoke"){
+           weather.innerHTML = '<i class="fa fa-cloud" style="color: #f1f2f6; font-size: 70px; " aria-hidden="true"></i>'
+        }
+        else if (tempStatus == "Rainy"){
+           weather.innerHTML = '<i class="fa fa-cloud-rain" style="color: #a4b0be; font-size: 70px; " aria-hidden="true"></i>'
+        }
+
+        var date = document.getElementById("date");
+        const getCurrentDay = () => {
+            var weekday = new Array(7)
+            weekday[0] = "Sun"
+            weekday[1] = "Mon"
+            weekday[2] = "Tue"
+            weekday[3] = "Wed"
+            weekday[4] = "Thrs"
+            weekday[5] = "Fri"
+            weekday[6] = "Sat"
+            let currentDate = new Date();
+            return weekday[currentDate.getDay()]
+        }
+
+        const getCurrentTime = () => {
+            var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+            var now = new Date();
+            var month = months[now.getMonth()]
+            var date = now.getDate();
+
+            var hours = now.getHours();
+            var mins = now.getMinutes();
+            var period = "AM";
+            if (hours > 11) {
+                period = "PM"
+                if (hours > 12) hours -= 12;
+                
+            }
+            if (mins < 10) {
+                mins = "0" + mins;
+            }
+            // console.log(month)
+            return `${ month } ${ date } | ${ hours }:${mins} ${ period }`
+        }
+        getCurrentTime()
+        date.innerHTML = getCurrentDay() + " | " + getCurrentTime()
+
+
+    </script>
+
+</body>
+
+</html>
